@@ -1,0 +1,6 @@
+make --dry-run --always-make --keep-going --print-directory
+make: Entering directory `/Users/m-essam/Workspace/C-C++/service_locator'
+make: Leaving directory `/Users/m-essam/Workspace/C-C++/service_locator'
+ 
+make: *** No targets specified and no makefile found.  Stop.
+
