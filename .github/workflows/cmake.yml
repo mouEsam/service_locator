@@ -30,8 +30,14 @@ jobs:
       run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
       
     - name: Make
+      working-directory: ${{github.workspace}}/build
       # Build your program with the given configuration
-      run: cd ${{github.workspace}}/build && make
+      run: make
+      
+    - name: Run
+      working-directory: ${{github.workspace}}/build
+      # Build your program with the given configuration
+      run: ./service_locator
 
     - name: Test
       working-directory: ${{github.workspace}}/build
