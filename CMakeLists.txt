@@ -9,8 +9,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED 20)
 
 set(EXECUTABLE_NAME service_locator)
 
-message(${CMAKE_CURRENT_SOURCE_DIR})
+message(${CMAKE_CURRENT_LIST_DIR})
 
 add_executable(${EXECUTABLE_NAME} main.cpp)
 
-target_include_directories(${EXECUTABLE_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(${EXECUTABLE_NAME} PUBLIC ${CMAKE_CURRENT_LIST_DIR})
