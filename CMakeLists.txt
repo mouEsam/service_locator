@@ -9,7 +9,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED 20)
 
 set(EXECUTABLE_NAME service_locator)
 
-file(GLOB APP_SOURCES */*.h)
+file(GLOB APP_SOURCES *.*)
 foreach (testsourcefile ${APP_SOURCES})
     get_filename_component(testname ${testsourcefile} NAME_WLE)
     get_filename_component(dirname ${testsourcefile} DIRECTORY)
