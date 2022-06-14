@@ -9,6 +9,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED 20)
 
 set(EXECUTABLE_NAME service_locator)
 
-add_executable(${EXECUTABLE_NAME} main.cpp)
+add_executable(${EXECUTABLE_NAME} main.cpp 
+                                    double_dispatch_service_locator.h 
+                                    static_service_locator.h 
+                                    dynamic_service_locator.h)
 
 target_include_directories(${EXECUTABLE_NAME} PRIVATE ".")
