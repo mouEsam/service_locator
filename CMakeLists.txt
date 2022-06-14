@@ -11,9 +11,6 @@ set(EXECUTABLE_NAME service_locator)
 
 message(${CMAKE_CURRENT_SOURCE_DIR})
 
-add_executable(${EXECUTABLE_NAME} main.cpp 
-                                    double_dispatch_service_locator.h 
-                                    static_service_locator.h 
-                                    dynamic_service_locator.h)
+add_executable(${EXECUTABLE_NAME} main.cpp)
 
 target_include_directories(${EXECUTABLE_NAME} PRIVATE ".")
