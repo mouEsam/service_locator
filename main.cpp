@@ -1,4 +1,5 @@
 #include "double_dispatch_service_locator.h"
+#include "single_dispatch_service_locator.h"
 #include "dynamic_service_locator.h"
 #include "static_service_locator.h"
 #include <chrono>
@@ -89,6 +90,11 @@ int double_dispatch_main(int iterations) {
   return locator_test(locator, iterations);
 }
 
+int single_dispatch_main(int iterations) {
+  SingleDispatchServiceLocator locator;
+  return locator_test(locator, iterations);
+}
+
 int dynamic_main(int iterations) {
   DynamicServiceLocator locator;
   return locator_test(locator, iterations);
@@ -120,6 +126,9 @@ int main() {
   std::cout << "result: " << result << std::endl;
   std::cout << "Double Dispatch" << std::endl;
   result = measure(std::bind(double_dispatch_main, iterations));
+  std::cout << "result: " << result << std::endl;
+  std::cout << "Single Dispatch" << std::endl;
+  result = measure(std::bind(single_dispatch_main, iterations));
   std::cout << "result: " << result << std::endl;
   std::cout << "Dynamic" << std::endl;
   result = measure(std::bind(dynamic_main, iterations));

@@ -15,58 +15,38 @@ class DoubleDispatchServiceLocator;
 template <class SERVICE> class _DHOLDER;
 template <class SERVICE> class _FACTORY_DHOLDER;
 
-class ValueCapturer {
-public:
-  virtual void capture(std::shared_ptr<void> value) = 0;
-  virtual ~ValueCapturer() {}
-};
-
-template <class VALUE> class _ValueCapturer : public ValueCapturer {
-  std::shared_ptr<VALUE> value;
-
-public:
-  std::shared_ptr<VALUE> get_value() const { return value; }
-  void capture(std::shared_ptr<void> value) override {
-    this->value = std::static_pointer_cast<VALUE>(value);
-  }
-};
-
 class _HolderVisitor {
 public:
   _HolderVisitor() {}
   template <class SERVICE>
-  inline void visit(const _DHOLDER<SERVICE> &holder,
-                    ValueCapturer &capturer) const {
-    return capturer.capture(holder.service);
+  inline std::shared_ptr<void> visit(const _DHOLDER<SERVICE> &holder) const {
+    return holder.service;
   }
   template <class SERVICE>
-  inline void visit(const _FACTORY_DHOLDER<SERVICE> &holder,
-                    ValueCapturer &capturer) const {
-    return capturer.capture(holder.factory());
+  inline std::shared_ptr<void> visit(const _FACTORY_DHOLDER<SERVICE> &holder) const {
+    return holder.factory();
   }
 };
 
-class ServiceHolder {
+class DServiceHolder {
 public:
-  virtual inline void resolve(const _HolderVisitor &visitor,
-                              ValueCapturer &capturer) const = 0;
-  virtual ~ServiceHolder() {}
+  virtual inline std::shared_ptr<void> resolve(const _HolderVisitor &visitor) const = 0;
+  virtual ~DServiceHolder() {}
 };
 
-template <class SERVICE> class _DHOLDER : public ServiceHolder {
+template <class SERVICE> class _DHOLDER : public DServiceHolder {
   friend class _HolderVisitor;
   friend class DoubleDispatchServiceLocator;
   std::shared_ptr<SERVICE> service;
 
 public:
   _DHOLDER(std::shared_ptr<SERVICE> service) : service(service) {}
-  inline void resolve(const _HolderVisitor &visitor,
-                      ValueCapturer &capturer) const override {
-    visitor.visit(*this, capturer);
+  inline std::shared_ptr<void> resolve(const _HolderVisitor &visitor) const override {
+    return visitor.visit(*this);
   }
 };
 
-template <class SERVICE> class _FACTORY_DHOLDER : public ServiceHolder {
+template <class SERVICE> class _FACTORY_DHOLDER : public DServiceHolder {
   friend class _HolderVisitor;
   friend class DoubleDispatchServiceLocator;
   std::function<std::shared_ptr<SERVICE>()> factory;
@@ -74,14 +54,13 @@ template <class SERVICE> class _FACTORY_DHOLDER : public ServiceHolder {
 public:
   _FACTORY_DHOLDER(std::function<std::shared_ptr<SERVICE>()> factory)
       : factory(factory) {}
-  inline void resolve(const _HolderVisitor &visitor,
-                      ValueCapturer &capturer) const override {
-    visitor.visit(*this, capturer);
+  inline std::shared_ptr<void> resolve(const _HolderVisitor &visitor) const override {
+    return visitor.visit(*this);
   }
 };
 
 class DoubleDispatchServiceLocator {
-  std::unordered_map<size_t, std::unique_ptr<ServiceHolder>> holders;
+  std::unordered_map<size_t, std::unique_ptr<DServiceHolder>> holders;
   _HolderVisitor visitor;
 
   template <class Class> static inline size_t hash_of() {
@@ -95,9 +74,7 @@ public:
     const size_t hash = hash_of<SERVICE_TYPE>();
     auto itr1 = holders.find(hash);
     if (itr1 != holders.end()) {
-      _ValueCapturer<SERVICE_TYPE> capturer;
-      itr1->second->resolve(visitor, capturer);
-      return capturer.get_value();
+      return std::static_pointer_cast<SERVICE_TYPE>(itr1->second->resolve(visitor));
     }
     return nullptr;
   }
