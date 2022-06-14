@@ -13,4 +13,4 @@ message(${CMAKE_CURRENT_SOURCE_DIR})
 
 add_executable(${EXECUTABLE_NAME} main.cpp)
 
-target_include_directories(${EXECUTABLE_NAME} PRIVATE .)
+target_include_directories(${EXECUTABLE_NAME} PUBLIC ".")
