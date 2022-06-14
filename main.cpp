@@ -1,3 +1,4 @@
+#include "double_dispatch_service_locator.h"
 #include "dynamic_service_locator.h"
 #include "static_service_locator.h"
 #include <chrono>
@@ -5,6 +6,9 @@
 #include <iostream>
 #include <memory>
 #include <ostream>
+
+
+const static int number = 30;
 
 class IMathService {
 public:
@@ -15,79 +19,89 @@ public:
 class MathService : public IMathService {
 public:
   MathService() = default;
-  int get_int() const override { return 0; }
+  int get_int() const override { return number; }
 };
 
 template <class LocatorType>
-void locator_test(LocatorType &locator, int iterations) {
+int locator_test(LocatorType &locator, int iterations) {
+
+  int result = 0;
+
   for (int i = 0; i < iterations; i++) {
-    locator.registerInstance(std::make_shared<int>(30000));
-    locator.registerInstance(std::make_shared<float>(30000));
-    locator.registerInstance(std::make_shared<double>(30000));
-    locator.registerInstance(std::make_shared<char>(30000));
-    locator.registerInstance(std::make_shared<unsigned char>(30000));
-    locator.registerInstance(std::make_shared<unsigned int>(30000));
-    locator.registerInstance(std::make_shared<unsigned long>(30000));
+    locator.registerInstance(std::make_shared<int>(number));
+    locator.registerInstance(std::make_shared<float>(number));
+    locator.registerInstance(std::make_shared<double>(number));
+    locator.registerInstance(std::make_shared<char>(number));
+    locator.registerInstance(std::make_shared<unsigned char>(number));
+    locator.registerInstance(std::make_shared<unsigned int>(number));
+    locator.registerInstance(std::make_shared<unsigned long>(number));
     locator.template registerInstance<IMathService>(
         std::make_shared<MathService>());
 
     locator.template registerFactory<int>(
-        []() { return std::make_shared<int>(30000); });
+        []() { return std::make_shared<int>(number); });
     locator.template registerFactory<float>(
-        []() { return std::make_shared<float>(30000); });
+        []() { return std::make_shared<float>(number); });
     locator.template registerFactory<double>(
-        []() { return std::make_shared<double>(30000); });
+        []() { return std::make_shared<double>(number); });
     locator.template registerFactory<char>(
-        []() { return std::make_shared<char>(30000); });
+        []() { return std::make_shared<char>(number); });
     locator.template registerFactory<unsigned char>(
-        []() { return std::make_shared<unsigned char>(30000); });
+        []() { return std::make_shared<unsigned char>(number); });
     locator.template registerFactory<unsigned int>(
-        []() { return std::make_shared<unsigned int>(30000); });
+        []() { return std::make_shared<unsigned int>(number); });
     locator.template registerFactory<unsigned long>(
-        []() { return std::make_shared<unsigned long>(30000); });
+        []() { return std::make_shared<unsigned long>(number); });
     locator.template registerFactory<IMathService>(
         std::make_shared<MathService>);
 
-    *locator.template resolve<int>();
-    *locator.template resolve<int>();
-    *locator.template resolve<float>();
-    *locator.template resolve<float>();
-    *locator.template resolve<double>();
-    *locator.template resolve<double>();
-    *locator.template resolve<char>();
-    *locator.template resolve<char>();
-    *locator.template resolve<unsigned char>();
-    *locator.template resolve<unsigned char>();
-    *locator.template resolve<unsigned int>();
-    *locator.template resolve<unsigned int>();
-    *locator.template resolve<unsigned long>();
-    *locator.template resolve<unsigned long>();
-    *locator.template resolve<IMathService>();
-    *locator.template resolve<IMathService>();
-    *locator.template resolve<IMathService>();
-    *locator.template resolve<IMathService>();
-    *locator.template resolve<IMathService>();
+    result += number == *locator.template resolve<int>();
+    result += number == *locator.template resolve<int>();
+    result += number == *locator.template resolve<float>();
+    result += number == *locator.template resolve<float>();
+    result += number == *locator.template resolve<double>();
+    result += number == *locator.template resolve<double>();
+    result += number == *locator.template resolve<char>();
+    result += number == *locator.template resolve<char>();
+    result += number == *locator.template resolve<unsigned char>();
+    result += number == *locator.template resolve<unsigned char>();
+    result += number == *locator.template resolve<unsigned int>();
+    result += number == *locator.template resolve<unsigned int>();
+    result += number == *locator.template resolve<unsigned long>();
+    result += number == *locator.template resolve<unsigned long>();
+    result += locator.template resolve<IMathService>()->get_int() == number;
+    result += locator.template resolve<IMathService>()->get_int() == number;
+    result += locator.template resolve<IMathService>()->get_int() == number; 
+    result += locator.template resolve<IMathService>()->get_int() == number; 
+    result += locator.template resolve<IMathService>()->get_int() == number;
   }
+
+  return result;
 }
 
-void static_main(int iterations) {
+int static_main(int iterations) {
   StaticServiceLocator locator;
-  locator_test(locator, iterations);
+  return locator_test(locator, iterations);
 }
 
-void dynamic_main(int iterations) {
+int double_dispatch_main(int iterations) {
+  DoubleDispatchServiceLocator locator;
+  return locator_test(locator, iterations);
+}
+
+int dynamic_main(int iterations) {
   DynamicServiceLocator locator;
-  locator_test(locator, iterations);
+  return locator_test(locator, iterations);
 }
 
-void measure(std::function<void()> operation) {
+int measure(std::function<int()> operation) {
   using std::chrono::duration;
   using std::chrono::duration_cast;
   using std::chrono::high_resolution_clock;
   using std::chrono::milliseconds;
 
   auto t1 = high_resolution_clock::now();
-  operation();
+  const auto result = operation();
   auto t2 = high_resolution_clock::now();
 
   auto ms_int = duration_cast<milliseconds>(t2 - t1);
@@ -96,12 +110,18 @@ void measure(std::function<void()> operation) {
 
   std::cout << ms_int.count() << "ms\n";
   std::cout << ms_double.count() << "ms\n";
+  return result;
 }
 
 int main() {
   int iterations = 10000;
   std::cout << "Static" << std::endl;
-  measure(std::bind(static_main, iterations));
+  int result = measure(std::bind(static_main, iterations));
+  std::cout << "result: " << result << std::endl;
+  std::cout << "Double Dispatch" << std::endl;
+  result = measure(std::bind(double_dispatch_main, iterations));
+  std::cout << "result: " << result << std::endl;
   std::cout << "Dynamic" << std::endl;
-  measure(std::bind(dynamic_main, iterations));
+  result = measure(std::bind(dynamic_main, iterations));
+  std::cout << "result: " << result << std::endl;
 }

@@ -24,7 +24,6 @@ public:
 template <int _SEED, class _SERVICE> class _HOLDER {
   friend class StaticServiceLocator<_SEED>;
   static std::shared_ptr<std::shared_ptr<_SERVICE>> service;
-private:
   _HOLDER() = delete;
 };
 
@@ -34,7 +33,6 @@ std::shared_ptr<std::shared_ptr<SERVICE>> _HOLDER<SEED, SERVICE>::service{};
 template <int _SEED, class _SERVICE> class _FACTORY_HOLDER {
   friend class StaticServiceLocator<_SEED>;
   static std::shared_ptr<std::function<std::shared_ptr<_SERVICE>()>> factory;
-private:
   _FACTORY_HOLDER() = delete;
 };
 
@@ -71,28 +69,25 @@ public:
     }
   }
 
-  StaticServiceLocator(StaticServiceLocator&& other) {
+  StaticServiceLocator(StaticServiceLocator &&other) {
     _ref = other._ref;
     other._ref.reset();
   }
 
-  StaticServiceLocator(const StaticServiceLocator& other) {
-    _ref = other._ref;
-  }
+  StaticServiceLocator(const StaticServiceLocator &other) { _ref = other._ref; }
 
-  StaticServiceLocator& operator=(StaticServiceLocator&& other) {
+  StaticServiceLocator &operator=(StaticServiceLocator &&other) {
     _ref = other._ref;
     other._ref.reset();
     return *this;
   }
 
-  StaticServiceLocator& operator=(const StaticServiceLocator& other) {
+  StaticServiceLocator &operator=(const StaticServiceLocator &other) {
     _ref = other._ref;
     return *this;
   }
 
-  template <class SERVICE_TYPE>
-  std::shared_ptr<SERVICE_TYPE> resolve() const {
+  template <class SERVICE_TYPE> std::shared_ptr<SERVICE_TYPE> resolve() const {
     auto service = _HOLDER<SEED, SERVICE_TYPE>::service;
     if (service)
       return *service;

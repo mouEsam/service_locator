@@ -8,30 +8,39 @@
 class DynamicServiceLocator {
   std::unordered_map<size_t, std::shared_ptr<void>> instances;
   std::unordered_map<size_t, std::function<std::shared_ptr<void>()>> factories;
+
+  template <class Class> static inline size_t hash_of() {
+    return typeid(Class).hash_code();
+  }
+
 public:
   DynamicServiceLocator() : instances(), factories(){};
-  ~DynamicServiceLocator() { clear(); }
+  ~DynamicServiceLocator() { clearAll(); }
 
-  void clear() {
+  template <class SERVICE_TYPE> void clear() {
+    instances.erase(hash_of<SERVICE_TYPE>());
+    factories.erase(hash_of<SERVICE_TYPE>());
+  }
+
+  void clearAll() {
     instances.clear();
     factories.clear();
   }
 
-  template <class SERVICE_TYPE> void registerInstance(std::shared_ptr<SERVICE_TYPE> instance) {
-    const size_t hash = typeid(SERVICE_TYPE).hash_code();
-    if (instances.find(hash) == instances.end())
-      instances.emplace(hash, instance);
+  template <class SERVICE_TYPE>
+  void registerInstance(std::shared_ptr<SERVICE_TYPE> instance) {
+    const size_t hash = hash_of<SERVICE_TYPE>();
+    instances.emplace(hash, instance);
   }
 
   template <class SERVICE_TYPE>
   void registerFactory(std::function<std::shared_ptr<SERVICE_TYPE>()> factory) {
-    const size_t hash = typeid(SERVICE_TYPE).hash_code();
-    if (factories.find(hash) == factories.end())
-      factories.emplace(hash, factory);
+    const size_t hash = hash_of<SERVICE_TYPE>();
+    factories.emplace(hash, factory);
   }
 
   template <class SERVICE_TYPE> std::shared_ptr<SERVICE_TYPE> resolve() const {
-    const size_t hash = typeid(SERVICE_TYPE).hash_code();
+    const size_t hash = hash_of<SERVICE_TYPE>();
     auto itr1 = instances.find(hash);
     if (itr1 != instances.end())
       return std::static_pointer_cast<SERVICE_TYPE>(itr1->second);
