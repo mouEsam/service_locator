@@ -10,7 +10,7 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 make: *** No rule to make target `all'.  Stop.
 
 
-# Make data base, printed on Tue Jun 14 02:13:27 2022
+# Make data base, printed on Wed Jun 15 16:25:41 2022
 
 # Variables
 
@@ -21,6 +21,7 @@ make: *** No rule to make target `all'.  Stop.
 # environment
 VSCODE_LOG_NATIVE = false
 # automatic
+ 
 ?D = $(patsubst %/,%,$(dir $?))
 # automatic
 @D = $(patsubst %/,%,$(dir $@))
@@ -45,7 +46,7 @@ INFOPATH = /opt/homebrew/share/info:
 # environment
 P9K_SSH = 0
 # environment
-VSCODE_IPC_HOOK_EXTHOST = /var/folders/9r/6ncm7v_s2099l0r_ltkb7ns00000gn/T/vscode-ipc-07822660-7b5b-4597-85b7-0c18bde521ab.sock
+VSCODE_IPC_HOOK_EXTHOST = /var/folders/9r/6ncm7v_s2099l0r_ltkb7ns00000gn/T/vscode-ipc-223ed5d6-b671-4c58-9800-b146f501bec2.sock
 # environment
 VSCODE_CWD = /
 # environment
@@ -59,18 +60,17 @@ ELECTRON_RUN_AS_NODE = 1
 # default
 .FEATURES := target-specific order-only second-expansion else-if archives jobserver check-symlink
 # environment
-SSH_AUTH_SOCK = /private/tmp/com.apple.launchd.6edAABzVoC/Listeners
+SSH_AUTH_SOCK = /private/tmp/com.apple.launchd.Y0iUMc1mnF/Listeners
 # automatic
 %F = $(notdir $%)
 # environment
-DISPLAY = /private/tmp/com.apple.launchd.pOh5Ra8rCB/org.xquartz:0
+DISPLAY = /private/tmp/com.apple.launchd.1esR8ic8VV/org.xquartz:0
 # environment
 VSCODE_PIPE_LOGGING = true
 # environment
 PWD = /Users/m-essam/Workspace/C-C++/service_locator
 # environment
 HOMEBREW_CELLAR = /opt/homebrew/Cellar
- 
 # environment
 ORIGINAL_XDG_CURRENT_DESKTOP = undefined
 # environment
@@ -82,11 +82,11 @@ HOME = /Users/m-essam
 # default
 MAKEFILEPATH := /Applications/Xcode.app/Contents/Developer/Makefiles
 # environment
-VSCODE_CODE_CACHE_PATH = /Users/m-essam/Library/Application Support/Code/CachedData/c3511e6c69bb39013c4a4b7b9566ec1ca73fc4d5
+VSCODE_CODE_CACHE_PATH = /Users/m-essam/Library/Application Support/Code/CachedData/4af164ea3a06f701fe3e89a2bcbb421d2026b68f
 # environment
 LOGNAME = m-essam
 # environment
-APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = 1
+APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = true
 # environment
 ZSH = /Users/m-essam/.oh-my-zsh
 # environment
@@ -120,7 +120,7 @@ TMPDIR = /var/folders/9r/6ncm7v_s2099l0r_ltkb7ns00000gn/T/
 # automatic
 *F = $(notdir $*)
 # environment
-VSCODE_IPC_HOOK = /Users/m-essam/Library/Application Support/Code/1.67.2-main.sock
+VSCODE_IPC_HOOK = /Users/m-essam/Library/Application Support/Code/1.68.0-main.sock
 # makefile
 MAKEFLAGS = Rrqp
 # environment
@@ -128,7 +128,7 @@ MFLAGS = -Rrqp
 # automatic
 *D = $(patsubst %/,%,$(dir $*))
 # environment
-XPC_SERVICE_NAME = application.com.microsoft.VSCode.68053792.68053798
+XPC_SERVICE_NAME = application.com.microsoft.VSCode.75334836.75334842
 # environment
 HOMEBREW_PREFIX = /opt/homebrew
 # automatic
@@ -166,7 +166,7 @@ LANG = C
 # environment
 TERM = xterm-256color
 # environment
-VSCODE_PID = 21088
+VSCODE_PID = 26884
 # variable set hash-table stats:
 # Load=76/1024=7%, Rehash=0, Collisions=1/97=1%
 
@@ -176,9 +176,9 @@ VSCODE_PID = 21088
 
 # Directories
 
-# . (device 16777232, inode 75093942): 11 files, no impossibilities.
+# . (device 16777231, inode 75093942): 15 files, no impossibilities.
 
-# 11 files, no impossibilities in 1 directories.
+# 15 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
@@ -222,6 +222,7 @@ makefile:
 # Load=0/32=0%, Rehash=0, Collisions=0/0=0%
 
 # Not a target:
+ 
 .DEFAULT:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
@@ -250,6 +251,6 @@ GNUmakefile:
 # strcache size: total = 0 / max = 0 / min = 4096 / avg = 0
 # strcache free: total = 0 / max = 0 / min = 4096 / avg = 0
 
-# Finished Make data base on Tue Jun 14 02:13:27 2022
+# Finished Make data base on Wed Jun 15 16:25:41 2022
 
  
